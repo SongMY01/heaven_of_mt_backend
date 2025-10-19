@@ -1,4 +1,4 @@
-package com.heavenofmt.backend;
+package com.heavenofmt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
