@@ -9,6 +9,9 @@ public class CustomGameDto {
     public static class CreateRequest {
         private String title;
         private String gameType;
+
+        public CreateRequest(String title, String gameType) {
+        }
     }
 
     @Getter @Setter
