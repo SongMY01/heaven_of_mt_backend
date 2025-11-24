@@ -10,15 +10,14 @@ public class CustomGameQuestionDto {
         private String questionText;
         private String answer;
         private String imageUrl;
-        private Integer orderIndex;
+        private int orderIndex;
     }
 
     @Getter @Setter
-    public static class Response {
-        private Long id;
+    public static class UpdateRequest {
         private String questionText;
         private String answer;
         private String imageUrl;
-        private Integer orderIndex;
+        private int orderIndex;
     }
 }

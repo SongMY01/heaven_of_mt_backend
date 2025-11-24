@@ -3,63 +3,50 @@ package com.heavenofmt.controller;
 import com.heavenofmt.domain.Project;
 import com.heavenofmt.dto.ProjectDto;
 import com.heavenofmt.service.ProjectService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/projects")
+@RequiredArgsConstructor
 public class ProjectController {
 
     private final ProjectService projectService;
 
-    // 프로젝트 생성
+    @Operation(summary = "프로젝트 생성", description = "새로운 프로젝트를 생성합니다.")
+    @ApiResponse(responseCode = "200", description = "프로젝트 생성 성공")
     @PostMapping
-    public ResponseEntity<ProjectDto> createProject(
-            @RequestParam Long userId,
-            @RequestParam String title
-    ) {
-        Project project = projectService.createProject(userId, title);
-        return ResponseEntity.ok(ProjectDto.from(project));
+    public ResponseEntity<Project> createProject(@RequestBody ProjectDto request) {
+        return ResponseEntity.ok(projectService.createProject(request.getUserId(), request.getTitle()));
     }
 
-    // 특정 유저의 프로젝트 목록 조회
+    @Operation(summary = "프로젝트 전체 조회", description = "모든 프로젝트를 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "조회 성공")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ProjectDto>> getProjectsByUser(@PathVariable Long userId) {
-        List<ProjectDto> projects = projectService.getProjectsByUser(userId)
-                .stream()
-                .map(ProjectDto::from)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(projects);
+    public ResponseEntity<List<Project>> getProjectsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(projectService.getProjectsByUser(userId));
     }
 
-    // 프로젝트 단건 조회
+    @Operation(summary = "특정 프로젝트 조회", description = "프로젝트 ID로 특정 프로젝트를 조회합니다.")
     @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectDto> getProject(@PathVariable Long projectId) {
-        Project project = projectService.getProject(projectId);
-        return ResponseEntity.ok(ProjectDto.from(project));
+    public ResponseEntity<Project> getProject(@PathVariable Long projectId) {
+        return ResponseEntity.ok(projectService.getProject(projectId));
     }
 
-    // 프로젝트 수정
-    @PutMapping("/{projectId}")
-    public ResponseEntity<ProjectDto> updateProject(
-            @PathVariable Long projectId,
-            @RequestParam String newTitle
-    ) {
-        Project updated = projectService.updateProject(projectId, newTitle);
-        return ResponseEntity.ok(ProjectDto.from(updated));
+    @Operation(summary = "프로젝트 수정", description = "프로젝트 제목을 수정합니다.")
+    @PatchMapping("/{projectId}")
+    public ResponseEntity<Project> updateProject(@PathVariable Long projectId, @RequestParam String title) {
+        return ResponseEntity.ok(projectService.updateProject(projectId, title));
     }
 
-    // 프로젝트 삭제
+    @Operation(summary = "프로젝트 삭제", description = "프로젝트를 삭제합니다.")
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<Void> deleteProject(
-            @PathVariable Long projectId,
-            @RequestParam Long userId
-    ) {
+    public ResponseEntity<Void> deleteProject(@PathVariable Long projectId, @RequestParam Long userId) {
         projectService.deleteProject(projectId, userId);
         return ResponseEntity.noContent().build();
     }
