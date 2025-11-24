@@ -36,4 +36,11 @@ public class CustomGameQuestion {
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
+    public void update(String questionText, String answer, String imageUrl, int orderIndex) {
+        this.questionText = questionText;
+        this.answer = answer;
+        this.imageUrl = imageUrl;
+        this.orderIndex = orderIndex;
+    }
+
 }
