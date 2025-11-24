@@ -17,15 +17,17 @@ public class CustomGame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String title; // 게임 제목
-
-    @Column(nullable = false)
-    private String gameType; // 예: 인물퀴즈, 초성퀴즈 등
+    private String title;
+    private String gameType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user; // 만든 사람
+    private User user;
+
+    // 추가된 부분
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CustomGameQuestion> questions = new ArrayList<>();
